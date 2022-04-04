@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router"
 
-
 import Layout from "@/layout/index.vue";
+import { clearPending } from "@/utils/axiosCancel";
 
 const routes = [
   {
@@ -32,7 +32,16 @@ const routes = [
   //   redirect: '/404',
   // },
 ]
-export const router = createRouter({
+const router = createRouter({
   history: createWebHashHistory(),
   routes: routes
 })
+
+router.beforeEach((to, from, next) => {
+  //在跳转路由之前，先清除所有的请求
+  clearPending()
+  // ...
+  next()
+})
+
+export default router
