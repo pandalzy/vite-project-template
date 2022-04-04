@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router"
 
 import Layout from "@/layout/index.vue";
 import { clearPending } from "@/utils/axiosCancel";
+import { App } from "vue";
 
 const routes = [
   {
@@ -44,4 +45,8 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
-export default router
+export { router }
+
+export function setupRouter(app: App<Element>) {
+  app.use(router)
+}

@@ -3,13 +3,14 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
-    "dev": "vite --force --mode dev",
+    "dev": "vite --mode dev",
     "prod": "vite --mode prod",
     "build": "vite build --mode prod",
     "preview": "vite preview"
   },
   "dependencies": {
     "axios": "^0.26.1",
+    "pinia": "^2.0.13",
     "qs": "^6.10.3",
     "vue": "^3.2.25",
     "vue-router": "^4.0.14"
