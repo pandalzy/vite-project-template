@@ -1,7 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router"
 
 import Layout from "@/layout/index.vue";
-import { clearPending } from "@/utils/axiosCancel";
 import { App } from "vue";
 
 const routes = [
@@ -38,15 +37,10 @@ const router = createRouter({
   routes: routes
 })
 
-router.beforeEach((to, from, next) => {
-  //在跳转路由之前，先清除所有的请求
-  clearPending()
-  // ...
-  next()
-})
 
 export { router }
 
 export function setupRouter(app: App<Element>) {
   app.use(router)
 }
+

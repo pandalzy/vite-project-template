@@ -5,5 +5,11 @@
   </nav>
 </template>
 
+<script lang="ts">
+export default {
+  name: "Header"
+}
+</script>
+
 <script setup lang="ts">
 </script>

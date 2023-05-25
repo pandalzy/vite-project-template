@@ -1,6 +1,6 @@
+import { useUserStoreWithOut } from "@/store/modules/user";
+import type { AxiosRequestConfig, AxiosRequestHeaders } from 'axios';
 import axios from "axios";
-
-import { removePending, addPending } from "./axiosCancel"
 
 const service = axios.create({
   // 请求的 base 地址
@@ -23,7 +23,7 @@ const showStatus = (status: number) => {
       message = '拒绝访问(403)'
       break
     case 404:
-      message = '请求出错(404)'
+      message = '未找到(404)'
       break
     case 408:
       message = '请求超时(408)'
@@ -54,26 +54,25 @@ const showStatus = (status: number) => {
 
 
 service.interceptors.request.use(
-  config => {
-    removePending(config) // 在请求开始前，对之前的请求做检查取消操作
-    addPending(config) // 将当前请求添加到 pending 中
-    // if (store.getters.token) {
-    //   config.headers["Authorization"] = "Bearer " + getToken();
-    // }
+  (config: AxiosRequestConfig) => {
+    // removePending(config) // 在请求开始前，对之前的请求做检查取消操作
+    // addPending(config) // 将当前请求添加到 pending 中
+    const userStore = useUserStoreWithOut();
+    if (userStore.token) {
+      const headers: AxiosRequestHeaders = config.headers || {}
+      headers["Authorization"] = "Bearer " + userStore.token;
+    }
     return config;
   },
   error => {
     console.log("request error:", error);
-    error.data = {};
-    error.data.message = "服务器异常，请联系管理员！";
     return Promise.resolve(error);
   }
 );
 
-
 service.interceptors.response.use(
   response => {
-    removePending(response) // 在请求结束后，移除本次请求
+    // removePending(response) // 在请求结束后，移除本次请求
     const status = response.status
     let msg = ''
     if (status < 200 || status >= 300) {
@@ -93,8 +92,7 @@ service.interceptors.response.use(
     } else {
       // handle error code
       // 错误抛到业务代码
-      error.data = {}
-      error.data.msg = '请求超时或服务器异常，请检查网络或联系管理员！'
+      console.log("response error:", error);
     }
     return Promise.reject(error);
   }

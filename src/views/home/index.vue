@@ -1,21 +1,26 @@
 <template>
-  <div>
-    Home
-    <button @click="login">login</button>
+  <div class="home">
+    <h1>Home</h1>
+    <div>count: {{ counter.count }}</div>
+    <div>doubleCount: {{ counter.doubleCount }}</div>
+    <button @click="counter.increment()">+1</button>
   </div>
 </template>
-
+<script lang="ts">
+export default { name: "Home" }
+</script>
 <script setup lang="ts">
-import { loginApi } from "../../api/login";
-async function login() {
-  const payload = {
-    username: "admin",
-    password: "123456"
-  }
-  const res = await loginApi(payload);
-  console.log(res);
-}
+import { useCounterStore } from '@/store/modules/counter';
+const counter = useCounterStore();
+counter.count++;
+counter.increment();
 </script>
 
 <style scoped>
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 200px;
+}
 </style>
